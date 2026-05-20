@@ -3,17 +3,14 @@ package project.ptit_cntt1_it211_session06.service;
 import project.ptit_cntt1_it211_session06.dto.request.CourseRequestDTO;
 import project.ptit_cntt1_it211_session06.dto.response.CourseResponseDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
 public interface CourseService {
 
-    Page<CourseResponseDTO> getAllCourses(
-            int page,
-            int size,
-            String sort
-    );
+    Page<CourseResponseDTO> getAllCourses(Pageable pageable);
 
     CourseResponseDTO getCourseById(Long id);
 

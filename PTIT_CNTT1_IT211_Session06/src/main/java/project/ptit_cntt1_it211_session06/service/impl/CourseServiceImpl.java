@@ -8,7 +8,8 @@ import project.ptit_cntt1_it211_session06.mapper.CourseMapper;
 import project.ptit_cntt1_it211_session06.repository.CourseRepository;
 import project.ptit_cntt1_it211_session06.service.CourseService;
 import project.ptit_cntt1_it211_session06.service.FileStorageService;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,23 +33,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Page<CourseResponseDTO> getAllCourses(
-            int page,
-            int size,
-            String sort
-    ) {
-
-        String[] sortParams = sort.split(",");
-
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by(
-                        Sort.Direction.fromString(sortParams[1]),
-                        sortParams[0]
-                )
-        );
-
+    public Page<CourseResponseDTO> getAllCourses(Pageable pageable) {
         return courseRepository
                 .findAll(pageable)
                 .map(courseMapper::toResponseDTO);
