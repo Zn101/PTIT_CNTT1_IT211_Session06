@@ -137,11 +137,38 @@ public class CourseServiceImpl implements CourseService {
             MultipartFile file
     ) {
 
-        return null;
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Course not found with id: " + id
+                        )
+                );
+
+        if (course.getImageUrl() != null) {
+            fileStorageService.deleteFile(course.getImageUrl());
+        }
+
+        String imageUrl = fileStorageService.saveFile(file);
+        course.setImageUrl(imageUrl);
+        Course updatedCourse = courseRepository.save(course);
+
+        return courseMapper.toResponseDTO(updatedCourse);
     }
 
     @Override
     public void deleteCourseImage(Long id) {
 
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Course not found with id: " + id
+                        )
+                );
+
+        if (course.getImageUrl() != null) {
+            fileStorageService.deleteFile(course.getImageUrl());
+            course.setImageUrl(null);
+            courseRepository.save(course);
+        }
     }
 }
