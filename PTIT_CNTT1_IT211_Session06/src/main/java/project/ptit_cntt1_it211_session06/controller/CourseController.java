@@ -2,6 +2,9 @@ package project.ptit_cntt1_it211_session06.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,10 +27,17 @@ public class CourseController {
     @GetMapping
     public Page<CourseResponseDTO> getAllCourses(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id,asc") String sort
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sort
     ) {
-        return courseService.getAllCourses(page, size, sort);
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(sort)
+        );
+
+        return courseService.getAllCourses(pageable);
     }
 
     @GetMapping("/{id}")
@@ -76,4 +86,5 @@ public class CourseController {
     public void deleteCourseImage(@PathVariable Long id) {
         courseService.deleteCourseImage(id);
     }
+
 }
